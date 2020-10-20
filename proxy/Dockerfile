@@ -23,7 +23,7 @@ RUN apt-get update && apt-get install -y \
      && \
      apt-get clean autoclean autoremove && \
      case $(uname -m) in \
-         x86_64) export LLVM_PKG=clang+llvm-${LLVM_VERSION}-x86_64-linux-gnu-ubuntu-18.04;; \
+         x86_64) export LLVM_PKG=clang+llvm-${LLVM_VERSION}-x86_64-linux-gnu-ubuntu-16.04;; \
          aarch64) export LLVM_PKG=clang+llvm-${LLVM_VERSION}-aarch64-linux-gnu;; \
          *) echo "cpu NOT in support list"; exit 1 ;; \
      esac && \

@@ -16,7 +16,7 @@ proxy-builder:
 	docker build -t $(BUILDER_HUB)/istio-proxy-builder proxy
 
 istio-builder:
-	docker build -t $(BUILDER_HUB)/istio-builder istio
+	docker build --build-arg ARCH=${TARGET_ARCH} -t $(BUILDER_HUB)/istio-builder istio
 
 push-builders:
 	docker push $(BUILDER_HUB)/istio-proxy-builder
@@ -24,7 +24,7 @@ push-builders:
 
 build-istio: build-proxy
 	mkdir -p build
-	docker run --rm -it \
+	docker run --rm \
 		-v /var/run/docker.sock:/var/run/docker.sock \
 		-v ${HOME}/.docker:/root/.docker \
 		-v ${PWD}/build:/build \
@@ -35,7 +35,7 @@ build-istio: build-proxy
 
 build-proxy:
 	mkdir -p build
-	docker run --rm -it \
+	docker run --rm \
 		-v /var/run/docker.sock:/var/run/docker.sock \
 		-v ${HOME}/.docker:/root/.docker \
 		-v ${PWD}/build:/build \
