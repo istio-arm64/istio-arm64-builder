@@ -42,8 +42,14 @@ RUN apt-get update && apt-get install -y \
      curl -L -o /usr/local/bin/bazel ${BAZEL_DOWNLOAD_URL} && \
      chmod +x /usr/local/bin/bazel && \
      \
-     curl -L -o /usr/local/bin/gn https://github.com/envoyproxy/envoy-build-tools/releases/download/build-tools/gn-arm64 && \
-     chmod +x /usr/local/bin/gn && \
+     git clone https://gn.googlesource.com/gn && \
+     cd gn && \
+     git checkout 501b49a3 && \
+     python build/gen.py && \
+     ninja -v -C out && \
+     out/gn_unittests && \
+     mv out/gn /usr/local/bin/gn && \
+     cd .. && \
      \
      rm -rf * /var/lib/apt/lists/* /usr/share/doc /usr/share/man usr/share/locale
 
