@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install -y \
      cmake \
      curl \
      git \
+     libc++-dev \
      libtool \
      make \
      ninja-build \
