@@ -20,6 +20,7 @@ ENV LLVM_INSTALL=/usr/lib/llvm-9
 ENV PATH="${LLVM_INSTALL}/bin:${PATH}"
 
 COPY --from=gn /build/gn/out/gn /usr/local/bin/
+COPY build.sh /usr/local/bin/
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
      autoconf \
@@ -58,8 +59,5 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
      chmod +x /usr/local/bin/* && \
      \
      rm -rf * /var/lib/apt/lists/* /usr/share/doc /usr/share/man usr/share/locale
-COPY build.sh /usr/local/bin/
-
-RUN chmod +x /usr/local/bin/build.sh
 
 CMD build.sh

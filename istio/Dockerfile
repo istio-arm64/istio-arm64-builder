@@ -13,6 +13,8 @@ ENV ISTIO_VERSION=1.6.12
 ENV HUB=istio
 ENV ISTIO_ENVOY_LOCAL=/build/envoy
 
+COPY build.sh /usr/local/bin/
+
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     build-essential \
@@ -28,10 +30,7 @@ RUN apt-get update && \
     gem install fpm && \
     curl -L https://golang.org/dl/go1.15.2.linux-${TARGET_ARCH}.tar.gz | tar -xzf - && \
     mv go /usr/ && \
-    rm -rf * /var/lib/apt/lists/* /usr/share/doc /usr/share/man usr/share/locale
-
-COPY build.sh /usr/local/bin/
-
-RUN chmod +x /usr/local/bin/build.sh
+    rm -rf * /var/lib/apt/lists/* /usr/share/doc /usr/share/man usr/share/locale && \
+    chmod +x /usr/local/bin/*
 
 CMD build.sh
