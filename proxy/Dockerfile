@@ -1,3 +1,16 @@
+FROM ubuntu:18.04 AS gn
+
+WORKDIR /build
+
+RUN  apt-get update && apt-get install -y --no-install-recommends git clang python ninja-build libclang-dev libc++-dev \
+     \
+     git clone https://gn.googlesource.com/gn && \
+     cd gn && \
+     git checkout 501b49a3 && \
+     python build/gen.py && \
+     ninja -v -C out && \
+     out/gn_unittests
+
 FROM ubuntu:18.04
 
 WORKDIR /build
@@ -5,6 +18,8 @@ WORKDIR /build
 ENV LLVM_VERSION=9.0.1
 ENV LLVM_INSTALL=/usr/lib/llvm-9
 ENV PATH="${LLVM_INSTALL}/bin:${PATH}"
+
+COPY --from=gn /build/gn/out/gn /usr/local/bin/
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
      autoconf \
@@ -40,20 +55,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
      esac && \
      \
      curl -L -o /usr/local/bin/bazel ${BAZEL_DOWNLOAD_URL} && \
-     chmod +x /usr/local/bin/bazel && \
-     \
-     git clone https://gn.googlesource.com/gn && \
-     cd gn && \
-     git checkout 501b49a3 && \
-     sed -i -e '/'"'"'-std=c++17'"'"'$/ s/$/,\n'"'"'    -stdlib=libc++'"'"'/' build/gen.py && \
-     python build/gen.py && \
-     ninja -v -C out && \
-     out/gn_unittests && \
-     mv out/gn /usr/local/bin/gn && \
-     cd .. && \
+     chmod +x /usr/local/bin/* && \
      \
      rm -rf * /var/lib/apt/lists/* /usr/share/doc /usr/share/man usr/share/locale
-
 COPY build.sh /usr/local/bin/
 
 RUN chmod +x /usr/local/bin/build.sh
