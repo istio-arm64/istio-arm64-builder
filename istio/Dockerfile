@@ -14,7 +14,7 @@ ENV HUB=istio
 ENV ISTIO_ENVOY_LOCAL=/build/envoy
 
 RUN apt-get update && \
-    apt-get install -y \
+    apt-get install -y --no-install-recommends \
     build-essential \
     curl \
     docker.io \

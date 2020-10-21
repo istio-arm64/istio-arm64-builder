@@ -6,13 +6,12 @@ ENV LLVM_VERSION=9.0.1
 ENV LLVM_INSTALL=/usr/lib/llvm-9
 ENV PATH="${LLVM_INSTALL}/bin:${PATH}"
 
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
      autoconf \
      automake \
      cmake \
      curl \
      git \
-     libstdc++-7-dev \
      libtool \
      make \
      ninja-build \
@@ -46,6 +45,7 @@ RUN apt-get update && apt-get install -y \
      git clone https://gn.googlesource.com/gn && \
      cd gn && \
      git checkout 501b49a3 && \
+     sed -i -e '/'"'"'-std=c++17'"'"'$/ s/$/,\n'"'"'    -stdlib=libc++'"'"'/' build/gen.py && \
      python build/gen.py && \
      ninja -v -C out && \
      out/gn_unittests && \
