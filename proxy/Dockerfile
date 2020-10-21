@@ -32,6 +32,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
      make \
      ninja-build \
      openjdk-11-jdk \
+     patch \
      python \
      unzip \
      virtualenv \
