@@ -2,7 +2,7 @@ FROM ubuntu:18.04 AS gn
 
 WORKDIR /build
 
-RUN  apt-get update && apt-get install -y --no-install-recommends git clang python ninja-build libclang-dev libc++-dev \
+RUN  apt-get update && apt-get install -y --no-install-recommends git clang python ninja-build libclang-dev libc++-dev && \
      \
      git clone https://gn.googlesource.com/gn && \
      cd gn && \
