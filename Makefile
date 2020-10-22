@@ -12,11 +12,14 @@ endif
 .PHONY: build-tools proxy-builder istio-builder push-builder build-istio cleanup
 build-tools: proxy-builder istio-builder
 
-proxy-builder:
-	docker buildx create --use
+setup-env:
+		apt-get install -y qemu
+		docker buildx create --use
+
+proxy-builder: setup-env
 	docker buildx build --platform linux/amd64,linux/arm64 -t $(BUILDER_HUB)/istio-proxy-builder proxy
 
-istio-builder:
+istio-builder: setup-env
 	docker buildx build --platform linux/amd64,linux/arm64 -t $(BUILDER_HUB)/istio-builder istio
 
 push-builders:
