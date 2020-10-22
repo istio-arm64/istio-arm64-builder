@@ -13,10 +13,10 @@ endif
 build-tools: proxy-builder istio-builder
 
 proxy-builder:
-	docker build -t $(BUILDER_HUB)/istio-proxy-builder proxy
+	docker buildx build --platform linux/amd64,linux/arm64 -t $(BUILDER_HUB)/istio-proxy-builder proxy
 
 istio-builder:
-	docker build --build-arg ARCH=${TARGET_ARCH} -t $(BUILDER_HUB)/istio-builder istio
+	docker buildx build --platform linux/amd64,linux/arm64 -t $(BUILDER_HUB)/istio-builder istio
 
 push-builders:
 	docker push $(BUILDER_HUB)/istio-proxy-builder

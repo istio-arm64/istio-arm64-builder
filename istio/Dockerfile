@@ -2,12 +2,9 @@ FROM ubuntu:18.04
 
 WORKDIR /build
 
-ARG ARCH
-
 ENV GOROOT=/usr/go
 ENV GOPATH=/build/go
 ENV PATH="${GOROOT}/bin:${PATH}"
-ENV TARGET_ARCH=${ARCH}
 ENV TARGET_OS=linux
 ENV ISTIO_VERSION=1.6.12
 ENV HUB=istio
@@ -27,6 +24,11 @@ RUN apt-get update && \
     ruby-dev \
     && \
     apt-get clean autoclean autoremove && \
+    case $(uname -m) in \
+         x86_64) export TARGET_ARCH=amd64;; \
+         aarch64) export TARGET_ARCH=arm64;; \
+         *) echo "cpu NOT in support list"; exit 1 ;; \
+     esac && \
     gem install fpm && \
     curl -L https://golang.org/dl/go1.15.2.linux-${TARGET_ARCH}.tar.gz | tar -xzf - && \
     mv go /usr/ && \

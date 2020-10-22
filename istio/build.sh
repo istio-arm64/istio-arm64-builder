@@ -12,6 +12,12 @@ if [ "x$TAG" = "x" ]; then
 	export TAG=$ISTIO_VERSION
 fi
 
+case $(uname -m) in 
+			x86_64) export TARGET_ARCH=amd64;;
+			aarch64) export TARGET_ARCH=arm64;;
+			*) echo "cpu NOT in support list"; exit 1 ;;
+esac
+
 make build
 
 make docker.base
