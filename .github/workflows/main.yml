@@ -21,7 +21,12 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-        
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: crazy-max/ghaction-docker-buildx@v3
+        with:
+          buildx-version: latest
+          qemu-version: latest      
       - name: Run a multi-line script
         run: |
           make build-tools
