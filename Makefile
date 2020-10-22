@@ -1,22 +1,16 @@
 export ISTIO_VERSION ?= 1.6.12
 export HUB ?= istioarm64
 export BUILDER_HUB ?= $(HUB)
-ifeq ($(shell uname -m),aarch64)
-  export TARGET_ARCH ?= arm64
-else ifeq ($(shell uname -m),x86_64)
-  export TARGET_ARCH ?= amd64
-else
-
-endif
 
 .PHONY: build-tools proxy-builder istio-builder push-builder build-istio cleanup
+
 build-tools: proxy-builder istio-builder
 
 proxy-builder: 
-	docker buildx build --platform linux/amd64,linux/arm64 -t $(BUILDER_HUB)/istio-proxy-builder proxy
+	docker build -t $(BUILDER_HUB)/istio-proxy-builder proxy
 
 istio-builder: 
-	docker buildx build --platform linux/amd64,linux/arm64 -t $(BUILDER_HUB)/istio-builder istio
+	docker build -t $(BUILDER_HUB)/istio-builder istio
 
 push-builders:
 	docker push $(BUILDER_HUB)/istio-proxy-builder
