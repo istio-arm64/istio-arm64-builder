@@ -23,7 +23,6 @@ build-istio: build-proxy
 		-v ${HOME}/.docker:/root/.docker \
 		-v ${PWD}/build:/build \
 		--env ISTIO_VERSION=$(ISTIO_VERSION) \
-		--env TARGET_ARCH=$(TARGET_ARCH) \
 		--env HUB=$(HUB) \
 		$(BUILDER_HUB)/istio-builder
 
