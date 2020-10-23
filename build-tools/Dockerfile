@@ -24,7 +24,6 @@ ENV GOCACHE=/work/out/gocache
 ENV TARGET_OS=linux
 ENV ISTIO_VERSION=1.6.12
 ENV HUB=istio
-ENV ISTIO_ENVOY_LOCAL=/work/out/envoy
 
 ENV PATH="${GOROOT}/bin:${LLVM_INSTALL}/bin:${PATH}"
 

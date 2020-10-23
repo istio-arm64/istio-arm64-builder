@@ -4,40 +4,24 @@ export BUILDER_HUB ?= $(HUB)
 
 .PHONY: build-tools proxy-builder istio-builder push-builder build-istio cleanup
 
-build-tools: proxy-builder istio-builder
-
-proxy-builder: 
-	docker build -t $(BUILDER_HUB)/istio-proxy-builder proxy
-
-istio-builder: 
-	docker build -t $(BUILDER_HUB)/istio-builder istio
+build-tools: 
+	docker build -t $(BUILDER_HUB)/build-tools build-tools
 
 push-builders:
-	docker push $(BUILDER_HUB)/istio-proxy-builder
-	docker push $(BUILDER_HUB)/istio-builder
+	docker push $(BUILDER_HUB)/build-tools
 
-build-istio: build-proxy
+build-istio:
 	mkdir -p build
 	docker run --rm \
 		-v /var/run/docker.sock:/var/run/docker.sock \
 		-v ${HOME}/.docker:/root/.docker \
-		-v ${PWD}/build:/build \
+		-v ${PWD}/build:/work \
 		--env ISTIO_VERSION=$(ISTIO_VERSION) \
 		--env HUB=$(HUB) \
-		$(BUILDER_HUB)/istio-builder
-
-build-proxy:
-	mkdir -p build
-	docker run --rm \
-		-v /var/run/docker.sock:/var/run/docker.sock \
-		-v ${HOME}/.docker:/root/.docker \
-		-v ${PWD}/build:/build \
-		-v ${PWD}/build/bazel:/root/.cache \
-		--env ISTIO_VERSION=$(ISTIO_VERSION) \
-		$(BUILDER_HUB)/istio-proxy-builder
+		$(BUILDER_HUB)/build-tools build.sh
 
 cleanup:
 	rm -rf build
-	echo y | docker image prune
-	echo y | docker builder prune
-	echo y | docker container prune
+	bash -c "docker image prune <<< y"
+	bash -c "docker builder prune <<< y"
+	bash -c "docker container prune <<< y"
