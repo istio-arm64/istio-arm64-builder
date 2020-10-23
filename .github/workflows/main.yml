@@ -38,6 +38,11 @@ jobs:
     name: Build on ubuntu-18.04 armv8
     steps:
       - uses: actions/checkout@v2.1.0
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
+        with:
+          version: latest
       - uses: uraimo/run-on-arch-action@v2.0.5
         name: Run commands
         id: runcmd
