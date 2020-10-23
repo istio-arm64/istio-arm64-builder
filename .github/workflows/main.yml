@@ -45,6 +45,7 @@ jobs:
           arch: aarch64
           distro: ubuntu18.04
           run: |
+            apt-get update
             apt-get install -y docker.io
             docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
             make build-tools
