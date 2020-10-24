@@ -5,7 +5,7 @@ export BUILDER_HUB ?= $(HUB)
 .PHONY: build-tools proxy-builder istio-builder push-builder build-istio cleanup
 
 build-tools: 
-	docker buildx build --platform linux/arm64,linux/amd64 -t $(BUILDER_HUB)/build-tools build-tools
+	docker buildx build --push --platform linux/arm64,linux/amd64 -t $(BUILDER_HUB)/build-tools build-tools
 
 push-tools:
 	docker push $(BUILDER_HUB)/build-tools
