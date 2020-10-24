@@ -1,4 +1,6 @@
-#!/bin/sh
+#!/bin/bash
+
+set -e
 
 case $(uname -m) in 
 	x86_64) export TARGET_ARCH=amd64;;
