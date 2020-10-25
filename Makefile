@@ -5,7 +5,7 @@ export BUILDER_HUB ?= $(HUB)
 .PHONY: build-tools proxy-builder istio-builder push-builder build-istio cleanup
 
 build-tools: 
-	docker buildx build --push --platform linux/arm64 -t $(BUILDER_HUB)/build-tools build-tools
+	docker buildx build --load --platform linux/arm64 -t $(BUILDER_HUB)/build-tools build-tools
 
 push-tools:
 	docker push $(BUILDER_HUB)/build-tools
@@ -15,8 +15,6 @@ build-istio:
 	docker run --rm \
 		-v /var/run/docker.sock:/var/run/docker.sock \
 		-v ${HOME}/.docker:/root/.docker \
-		-v ${PWD}/build:/work \
-		-v ${PWD}/build/bazel:/root/.cache \
 		--env ISTIO_VERSION=$(ISTIO_VERSION) \
 		--env HUB=$(HUB) \
 		$(BUILDER_HUB)/build-tools build.sh
