@@ -6,4 +6,4 @@ services:
   - docker
 script: 
   - docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
-  - travis_wait make build-istio
+  - travis_wait 60 make build-istio
