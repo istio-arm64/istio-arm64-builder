@@ -36,4 +36,5 @@ jobs:
       - name: Run a multi-line script
         run: |
           make build-tools
-          make build-istio
+          ISTIO_VERSION=1.7.3 make build-istio
+          ISTIO_VERSION=1.6.12 make build-istio
