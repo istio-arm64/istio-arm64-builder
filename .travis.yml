@@ -1,5 +1,5 @@
 dist: xenial
-arch: arm64
+arch: amd64
 language: c
 sudo: false
 compiler: gcc
