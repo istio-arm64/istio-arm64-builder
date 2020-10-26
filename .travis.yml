@@ -1,9 +1,13 @@
 dist: xenial
-arch: arm64
-language: c
-compiler: gcc
+arch: 
+  - arm64
+language: 
+  - c
+compiler: 
+  - gcc
 services:
   - docker
 script: 
-  - travis_wait docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
+  - echo "Starting build-task"
+  - docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
   - travis_wait make build-istio
