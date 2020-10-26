@@ -9,6 +9,6 @@ services:
   - docker
 install:
   - echo "Starting install-task"
-  - docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
+  - uname -a
 script: 
-  - travis_wait make build-istio
+  - echo ok
