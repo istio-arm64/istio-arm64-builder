@@ -1,4 +1,4 @@
-dist: xenial
+dist: bionic
 arch: 
   - arm64
 language: 
@@ -7,7 +7,8 @@ compiler:
   - gcc
 services:
   - docker
-script: 
-  - echo "Starting build-task"
+install:
+  - echo "Starting install-task"
   - docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
+script: 
   - travis_wait make build-istio
