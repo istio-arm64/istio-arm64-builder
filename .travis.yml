@@ -5,5 +5,5 @@ compiler: gcc
 services:
   - docker
 script: 
-  - docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
-  - travis_wait 600 make build-istio
+  - travis_wait docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
+  - travis_wait make build-istio
