@@ -2,6 +2,7 @@ dist: xenial
 arch: 
   - arm64
 language: c
+sudo: false
 compiler: 
   - gcc
 services:
