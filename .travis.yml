@@ -1,8 +1,7 @@
 dist: xenial
 arch: 
   - arm64
-language: 
-  - c
+language: c
 compiler: 
   - gcc
 services:
