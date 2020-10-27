@@ -37,7 +37,7 @@ install:
   - sudo curl -L -o /usr/local/bin/bazel https://github.com/Tick-Tocker/bazelisk-arm64/releases/download/arm64/bazelisk-linux-arm64
   - curl -L https://golang.org/dl/go1.15.2.linux-${TARGET_ARCH}.tar.gz | tar -xzf -
   - sudo mv go /usr/
-  - gem install fpm
+  - travis_wait 30 gem install fpm
   - sudo chmod +x /usr/local/bin/*
   - docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
 script: 
