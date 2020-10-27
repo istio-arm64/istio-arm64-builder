@@ -6,43 +6,11 @@ sudo: true
 env:
   global:
   - ISTIO_VERSION=1.6.12
-  - TARGET_ARCH=$TRAVIS_CPU_ARCH
-  - LLVM_VERSION=9.0.1
-  - LLVM_INSTALL=/usr/lib/llvm-9
-  - LLVM_PKG=clang+llvm-${LLVM_VERSION}-aarch64-linux-gnu
-  - GOROOT=/usr/go
-  - GOPATH=${PWD}/go
-  - GOCACHE=${PWD}/gocache
-  - TARGET_OS=linux
   - HUB=istioarm64
-  - PATH="${GOROOT}/bin:${LLVM_INSTALL}/bin:${PATH}"
-  - BUILD_WITH_CONTAINER=0
-  - USE_LOCAL_PROXY=1
-  - ISTIO_ENVOY_LOCAL=${PWD}/proxy/bazel-bin/src/envoy/envoy
-  - ISTIO_ENVOY_LOCAL_PATH=$ISTIO_ENVOY_LOCAL
-  - TARGET_OUT_LINUX="${PWD}/istio/out/${TARGET_OS}_${TARGET_ARCH}"
-  - CONTAINER_TARGET_OUT_LINUX=$TARGET_OUT_LINUX
-  - TAG=${ISTIO_VERSION}
-  
-compiler: 
-  - clang
+  - TAG=${ISTIO_VERSION}-${TRAVIS_CPU_ARCH}
 services:
   - docker
-install:
-  - sudo curl -L -o /usr/local/bin/gn https://github.com/envoyproxy/envoy-build-tools/releases/download/build-tools/gn-arm64 && sudo chmod +x /usr/local/bin/gn
-  - sudo apt-get update && sudo apt-get install -y --no-install-recommends autoconf automake build-essential cmake curl git libtool make ninja-build openjdk-11-jdk patch python rpm ruby ruby-dev unzip virtualenv xz-utils 
-  - curl -L "https://github.com/llvm/llvm-project/releases/download/llvmorg-${LLVM_VERSION}/${LLVM_PKG}.tar.xz" | tar -xJf -
-  - sudo mkdir -p ${LLVM_INSTALL}
-  - sudo mv ${LLVM_PKG}/* ${LLVM_INSTALL}/ && sudo sh -c "echo ${LLVM_INSTALL}/lib > /etc/ld.so.conf.d/llvm.conf" && sudo ldconfig
-  - sudo curl -L -o /usr/local/bin/bazel https://github.com/Tick-Tocker/bazelisk-arm64/releases/download/arm64/bazelisk-linux-arm64
-  - curl -L https://golang.org/dl/go1.15.2.linux-${TARGET_ARCH}.tar.gz | tar -xzf -
-  - sudo mv go /usr/
-  - while sleep 9m; do ps aux; echo "=====[ $SECONDS seconds still running ]====="; done &
-  - gem install fpm
-  - kill %1  
-  - sudo chmod +x /usr/local/bin/*
-  - docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
 script: 
   - while sleep 9m; do ps aux; echo "=====[ $SECONDS seconds still running ]====="; done &
-  - git clone --depth=1 -b $ISTIO_VERSION https://github.com/istio/proxy.git && cd proxy && BAZEL_BUILD_ARGS='-c opt --jobs=2' make build_envoy && cd .. && git clone --depth=1 -b $ISTIO_VERSION https://github.com/istio/istio.git && cd istio && make build && HUB=docker.io/istio TAG=$(grep BASE_VERSION Makefile.core.mk | awk '{print $3;}') make docker.base && sed -i -e '/amd64/ s/^/#/' Makefile.core.mk && sed -i -e 's/x86_64/aarch64/g' pilot/docker/Dockerfile.proxyv2 && make docker
+  - make build-istio
   - kill %1
