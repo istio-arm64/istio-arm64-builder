@@ -39,15 +39,7 @@ install:
   - sudo mv go /usr/
   - gem install fpm
   - sudo chmod +x /usr/local/bin/*
-script: 
-  - git clone --depth=1 -b $ISTIO_VERSION https://github.com/istio/proxy.git
-  - cd proxy
-  - BAZEL_BUILD_ARGS='-c opt' travis_wait 300 make build_envoy
-  - cd ..
   - docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
-  - git clone --depth=1 -b $ISTIO_VERSION https://github.com/istio/istio.git
-  - cd istio
-  - make build && HUB=docker.io/istio TAG=$(grep BASE_VERSION Makefile.core.mk | awk '{print $3;}') make docker.base
-  - sed -i -e '/amd64/ s/^/#/' Makefile.core.mk && sed -i -e 's/x86_64/aarch64/g' pilot/docker/Dockerfile.proxyv2
-  - make docker
+script: 
+  - git clone --depth=1 -b $ISTIO_VERSION https://github.com/istio/proxy.git && cd proxy && BAZEL_BUILD_ARGS='-c opt' travis_wait 300 make build_envoy && cd .. && git clone --depth=1 -b $ISTIO_VERSION https://github.com/istio/istio.git && cd istio && make build && HUB=docker.io/istio TAG=$(grep BASE_VERSION Makefile.core.mk | awk '{print $3;}') make docker.base && sed -i -e '/amd64/ s/^/#/' Makefile.core.mk && sed -i -e 's/x86_64/aarch64/g' pilot/docker/Dockerfile.proxyv2 && make docker
   
