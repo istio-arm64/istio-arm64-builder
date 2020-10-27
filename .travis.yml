@@ -1,9 +1,15 @@
 dist: xenial
-arch: amd64
+arch: 
+  - arm64
 language: c
 sudo: false
-compiler: gcc
+compiler: 
+  - gcc
 services:
   - docker
-install: skip
-script: echo "Start make-task" && docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD} && make build-istio
+install:
+  - echo "Starting install-task"
+script: 
+  - echo "Start make-task"
+  - docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
+  - travis_wait make build-istio
