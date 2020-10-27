@@ -33,7 +33,7 @@ install:
   - sudo apt-get update && sudo apt-get install -y --no-install-recommends autoconf automake build-essential cmake curl git libtool make ninja-build openjdk-11-jdk patch python rpm ruby ruby-dev unzip virtualenv xz-utils 
   - curl -L "https://github.com/llvm/llvm-project/releases/download/llvmorg-${LLVM_VERSION}/${LLVM_PKG}.tar.xz" | tar -xJf -
   - sudo mkdir -p ${LLVM_INSTALL}
-  - sudo mv ${LLVM_PKG}/* ${LLVM_INSTALL}/ && sudo echo "${LLVM_INSTALL}/lib" > /etc/ld.so.conf.d/llvm.conf && sudo ldconfig
+  - sudo mv ${LLVM_PKG}/* ${LLVM_INSTALL}/ && sudo sh -c "echo ${LLVM_INSTALL}/lib > /etc/ld.so.conf.d/llvm.conf" && sudo ldconfig
   - sudo curl -L -o /usr/local/bin/bazel https://github.com/Tick-Tocker/bazelisk-arm64/releases/download/arm64/bazelisk-linux-arm64
   - curl -L https://golang.org/dl/go1.15.2.linux-${TARGET_ARCH}.tar.gz | tar -xzf -
   - sudo mv go /usr/
