@@ -12,5 +12,5 @@ services:
   - docker
 script: 
   - while sleep 9m; do ps aux; echo "=====[ $SECONDS seconds still running ]====="; done &
-  - make build-istio
+  - make build-istio > /dev/null
   - kill %1
