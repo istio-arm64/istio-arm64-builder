@@ -6,7 +6,7 @@ sudo: true
 env:
   global:
   - ISTIO_VERSION=1.6.12
-  - TARGET_ARCH=arm64
+  - TARGET_ARCH=$TRAVIS_CPU_ARCH
   - LLVM_VERSION=9.0.1
   - LLVM_INSTALL=/usr/lib/llvm-9
   - LLVM_PKG=clang+llvm-${LLVM_VERSION}-aarch64-linux-gnu
@@ -22,7 +22,7 @@ env:
   - ISTIO_ENVOY_LOCAL_PATH=$ISTIO_ENVOY_LOCAL
   - TARGET_OUT_LINUX="${PWD}/istio/out/${TARGET_OS}_${TARGET_ARCH}"
   - CONTAINER_TARGET_OUT_LINUX=$TARGET_OUT_LINUX
-  - TAG=${ISTIO_VERSION}-${TARGET_ARCH}
+  - TAG=${ISTIO_VERSION}
   
 compiler: 
   - clang
