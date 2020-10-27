@@ -39,6 +39,7 @@ install:
   - sudo mv go /usr/
   - sudo gem install fpm
   - sudo chmod +x /usr/local/bin/*
+  - env
 script: 
   - git clone --depth=1 -b $ISTIO_VERSION https://github.com/istio/proxy.git && cd proxy && BAZEL_BUILD_ARGS="$BAZEL_BUILD_ARGS -c opt" make build_envoy && cd ..
   - docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
