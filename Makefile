@@ -16,7 +16,7 @@ build-istio:
 	docker run --rm \
 		-v /var/run/docker.sock:/var/run/docker.sock \
 		-v ${HOME}/.docker:/root/.docker \
-		--env BAZEL_BUILD_ARGS="$(BAZEL_BUILD_ARGS)"
+		--env BAZEL_BUILD_ARGS="$(BAZEL_BUILD_ARGS)" \
 		--env ISTIO_VERSION=$(ISTIO_VERSION) \
 		--env HUB=$(HUB) \
 		$(BUILDER_HUB)/build-tools build.sh
