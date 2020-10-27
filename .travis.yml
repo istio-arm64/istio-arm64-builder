@@ -1,15 +1,45 @@
-dist: xenial
+dist: bionic
 arch: 
   - arm64
 language: c
-sudo: false
+sudo: true
+env:
+  - ISTIO_VERSION=1.6.12
+  - TARGET_ARCH=arm64
+  - LLVM_VERSION=9.0.1
+  - LLVM_INSTALL=/usr/lib/llvm-9
+  - LLVM_PKG=clang+llvm-${LLVM_VERSION}-aarch64-linux-gnu
+  - GOROOT=/usr/go
+  - GOPATH=${PWD}/go
+  - GOCACHE=${PWD}/gocache
+  - TARGET_OS=linux
+  - HUB=istioarm64
+  - PATH="${GOROOT}/bin:${LLVM_INSTALL}/bin:${PATH}"
+  - BUILD_WITH_CONTAINER=0
+  - USE_LOCAL_PROXY=1
+  - ISTIO_ENVOY_LOCAL=${PWD}/proxy/bazel-bin/src/envoy/envoy
+  - ISTIO_ENVOY_LOCAL_PATH=$ISTIO_ENVOY_LOCAL
+  - TARGET_OUT_LINUX="${PWD}/istio/out/${TARGET_OS}_${TARGET_ARCH}"
+  - CONTAINER_TARGET_OUT_LINUX=$TARGET_OUT_LINUX
+  - TAG=${ISTIO_VERSION}-${TARGET_ARCH}
+  
 compiler: 
   - gcc
 services:
   - docker
 install:
-  - echo "Starting install-task"
+  - sudo curl -L -o /usr/local/bin/gn https://github.com/envoyproxy/envoy-build-tools/releases/download/build-tools/gn-arm64 && sudo chmod +x /usr/local/bin/gn
+  - sudo apt-get update && sudo apt-get install -y --no-install-recommends autoconf automake build-essential cmake curl git libtool make ninja-build openjdk-11-jdk patch python rpm ruby ruby-dev unzip virtualenv xz-utils 
+  - curl -L "https://github.com/llvm/llvm-project/releases/download/llvmorg-${LLVM_VERSION}/${LLVM_PKG}.tar.xz" | tar -xJf -
+  - sudo mkdir -p ${LLVM_INSTALL}
+  - sudo mv ${LLVM_PKG}/* ${LLVM_INSTALL}/
+  - sudo curl -L -o /usr/local/bin/bazel https://github.com/Tick-Tocker/bazelisk-arm64/releases/download/arm64/bazelisk-linux-arm64
+  - curl -L https://golang.org/dl/go1.15.2.linux-${TARGET_ARCH}.tar.gz | tar -xzf -
+  - sudo mv go /usr/
+  - sudo gem install fpm
+  - sudo chmod +x /usr/local/bin/*
 script: 
-  - echo "Start make-task"
+  - git clone --depth=1 -b $ISTIO_VERSION https://github.com/istio/proxy.git && cd proxy && BAZEL_BUILD_ARGS="$BAZEL_BUILD_ARGS -c opt" make build_envoy && cd ..
   - docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
-  - travis_wait make build-istio
+  - git clone --depth=1 -b $ISTIO_VERSION https://github.com/istio/istio.git && cd istio && make build && HUB=docker.io/istio TAG=$(grep BASE_VERSION Makefile.core.mk | awk '{print $3;}') make docker.base && sed -i -e '/amd64/ s/^/#/' Makefile.core.mk && sed -i -e 's/x86_64/aarch64/g' pilot/docker/Dockerfile.proxyv2 && make docker
+  
