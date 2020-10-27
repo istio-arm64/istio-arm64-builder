@@ -37,7 +37,7 @@ install:
   - sudo curl -L -o /usr/local/bin/bazel https://github.com/Tick-Tocker/bazelisk-arm64/releases/download/arm64/bazelisk-linux-arm64
   - curl -L https://golang.org/dl/go1.15.2.linux-${TARGET_ARCH}.tar.gz | tar -xzf -
   - sudo mv go /usr/
-  - sudo gem install fpm
+  - gem install fpm
   - sudo chmod +x /usr/local/bin/*
 script: 
   - git clone --depth=1 -b $ISTIO_VERSION https://github.com/istio/proxy.git
