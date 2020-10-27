@@ -1,6 +1,7 @@
 export ISTIO_VERSION ?= 1.6.12
 export HUB ?= istioarm64
 export BUILDER_HUB ?= $(HUB)
+export BAZEL_BUILD_ARGS ?= ""
 
 .PHONY: build-tools proxy-builder istio-builder push-builder build-istio cleanup
 
@@ -15,6 +16,7 @@ build-istio:
 	docker run --rm \
 		-v /var/run/docker.sock:/var/run/docker.sock \
 		-v ${HOME}/.docker:/root/.docker \
+		--env BAZEL_BUILD_ARGS="$(BAZEL_BUILD_ARGS)"
 		--env ISTIO_VERSION=$(ISTIO_VERSION) \
 		--env HUB=$(HUB) \
 		$(BUILDER_HUB)/build-tools build.sh
