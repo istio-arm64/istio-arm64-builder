@@ -26,6 +26,6 @@ jobs:
           distro: ubuntu18.04
           run: |
             uname -a
-            sudo apt-get update && sudo apt-get install docker-ce
+            apt-get update &&  apt-get install -y make docker-ce
             docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
             ISTIO_VERSION=1.6.12 make build-istio
