@@ -25,7 +25,7 @@ env:
   - TAG=${ISTIO_VERSION}-${TARGET_ARCH}
   
 compiler: 
-  - gcc
+  - clang
 services:
   - docker
 install:
