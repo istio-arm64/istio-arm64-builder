@@ -4,6 +4,7 @@ arch:
 language: c
 sudo: true
 env:
+  global:
   - ISTIO_VERSION=1.6.12
   - TARGET_ARCH=arm64
   - LLVM_VERSION=9.0.1
