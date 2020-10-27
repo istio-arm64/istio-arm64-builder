@@ -6,7 +6,7 @@ export BAZEL_BUILD_ARGS ?= ""
 .PHONY: build-tools proxy-builder istio-builder push-builder build-istio cleanup
 
 build-tools: 
-	docker buildx build --load --platform linux/arm64 -t $(BUILDER_HUB)/build-tools build-tools
+	docker buildx build --push --platform linux/arm64 -t $(BUILDER_HUB)/build-tools build-tools
 
 push-tools:
 	docker push $(BUILDER_HUB)/build-tools
