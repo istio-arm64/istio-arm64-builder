@@ -39,8 +39,10 @@ install:
   - sudo mv go /usr/
   - while sleep 9m; do echo "=====[ $SECONDS seconds still running ]====="; done &
   - gem install fpm
+  - kill %1  
   - sudo chmod +x /usr/local/bin/*
   - docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
 script: 
+  - while sleep 9m; do echo "=====[ $SECONDS seconds still running ]====="; done &
   - git clone --depth=1 -b $ISTIO_VERSION https://github.com/istio/proxy.git && cd proxy && BAZEL_BUILD_ARGS='-c opt' make build_envoy && cd .. && git clone --depth=1 -b $ISTIO_VERSION https://github.com/istio/istio.git && cd istio && make build && HUB=docker.io/istio TAG=$(grep BASE_VERSION Makefile.core.mk | awk '{print $3;}') make docker.base && sed -i -e '/amd64/ s/^/#/' Makefile.core.mk && sed -i -e 's/x86_64/aarch64/g' pilot/docker/Dockerfile.proxyv2 && make docker
   - kill %1
