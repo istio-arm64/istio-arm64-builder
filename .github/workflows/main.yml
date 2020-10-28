@@ -26,6 +26,6 @@ jobs:
           distro: ubuntu18.04
           run: |
             uname -a
-            sudo apt-get update && sudo apt-get install docker-ce make
+            apt-get update && apt-get install docker.io make
             docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
             ISTIO_VERSION=1.6.12 BAZEL_BUILD_ARGS=“--jobs 2” make build-istio
