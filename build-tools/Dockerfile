@@ -13,6 +13,8 @@ RUN  apt-get update && apt-get install -y --no-install-recommends ca-certificate
 
 FROM ubuntu:18.04
 
+LABEL builder="true"
+
 WORKDIR /work
 
 ENV LLVM_VERSION=9.0.1
