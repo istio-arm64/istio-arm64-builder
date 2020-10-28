@@ -23,6 +23,6 @@ build-istio:
 
 cleanup:
 	rm -rf build
-	bash -c "docker image prune <<< y"
-	bash -c "docker builder prune <<< y"
 	bash -c "docker container prune <<< y"
+	bash -c "docker builder prune <<< y"
+	bash -c "docker image prune -a <<< y"

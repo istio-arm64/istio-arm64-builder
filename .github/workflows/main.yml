@@ -24,3 +24,4 @@ jobs:
       - name: Run a multi-line script
         run: |
           ISTIO_VERSION=1.6.12 HUB=${{ secrets.HUB }} TAG=$ISTIO_VERSION BAZEL_BUILD_ARGS="--jobs 2" make build-istio
+          make cleanup
