@@ -1,7 +1,7 @@
 # This is a basic workflow to help you get started with Actions
 
 name: CI
-
+runs-on: self-hosted
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
 on:
@@ -12,20 +12,15 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  armv8_job:
-    # The host should always be Linux
-    runs-on: ubuntu-18.04
-    name: Build on ubuntu-18.04 armv8
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - uses: actions/checkout@v2.1.0
-      - uses: uraimo/run-on-arch-action@v2.0.5
-        name: Run commands
-        id: runcmd
-        with:
-          arch: aarch64
-          distro: ubuntu18.04
-          run: |
-            uname -a
-            apt-get update && apt-get install docker.io make
-            docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
-            ISTIO_VERSION=1.6.12 BAZEL_BUILD_ARGS=“--jobs 2” make build-istio
+      - name: docker-login
+        run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }} ${{ secrets.HUB_SERVER }}
+      - name: Run a multi-line script
+        run: |
+          HUB=${{ secrets.HUB }} ISTIO_VERSION=1.6.12 BAZEL_BUILD_ARGS=“--jobs 2” make build-istio
