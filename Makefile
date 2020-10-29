@@ -25,4 +25,4 @@ build-istio:
 cleanup:
 	bash -c "docker container prune <<< y"
 	bash -c "docker builder prune <<< y"
-	bash -c "docker image prune --filter 'builder!=true' <<< y"
+	bash -c "docker image prune -a --filter 'label!=builder' <<< y"
