@@ -23,5 +23,5 @@ jobs:
         run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }} ${{ secrets.HUB_SERVER }}
       - name: Run a multi-line script
         run: |
-          ISTIO_VERSION=1.6.12 HUB=${{ secrets.HUB }} TAG=$ISTIO_VERSION BAZEL_BUILD_ARGS="--jobs 2" make build-istio
+          ISTIO_VERSION=1.7.4 HUB=${{ secrets.HUB }} TAG=$ISTIO_VERSION BAZEL_BUILD_ARGS="--jobs 1" make build-istio
           make cleanup

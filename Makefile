@@ -1,5 +1,6 @@
 export ISTIO_VERSION ?= 1.6.12
 export HUB ?= istioarm64
+export TAG ?= $(ISTIO_VERSION)
 export BUILDER_HUB ?= $(HUB)
 export BAZEL_BUILD_ARGS ?= ""
 
@@ -19,10 +20,11 @@ build-istio:
 		--env BAZEL_BUILD_ARGS="$(BAZEL_BUILD_ARGS)" \
 		--env ISTIO_VERSION=$(ISTIO_VERSION) \
 		--env HUB=$(HUB) \
+		--env TAG=$(TAG) \
 		$(BUILDER_HUB)/build-tools build.sh
 
 cleanup:
 	rm -rf build
 	bash -c "docker container prune <<< y"
 	bash -c "docker builder prune <<< y"
-	bash -c "docker image prune <<< y"
+	bash -c "docker image prune --filter 'builder!=true' <<< y"
