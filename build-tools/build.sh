@@ -37,7 +37,8 @@ export DOCKER_CLI_EXPERIMENTAL=enabled
 docker images | grep $TAG | awk '{print $1" "$2;}' | \
 while read I T; do
   docker push $I:$T
-  docker manifest create --amend $I:$ISTIO_VERSION $I:${ISTIO_VERSION}-amd64 $I:${ISTIO_VERSION}-arm64 || echo ignore docker manifest error.
-	docker manifest push --purge $I:$ISTIO_VERSION  || echo ignore docker manifest error.
+  docker manifest create --amend $I:$ISTIO_VERSION $I:${ISTIO_VERSION}-amd64 $I:${ISTIO_VERSION}-arm64 && \
+	  docker manifest push --purge $I:$ISTIO_VERSION || \
+	  echo ignore docker manifest error.
 done
 git checkout .
