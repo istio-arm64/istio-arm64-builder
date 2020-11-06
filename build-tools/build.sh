@@ -34,6 +34,12 @@ if [ $(uname -m) = aarch64 ]; then
 	sed -i -e '/amd64/ s/^/#/' Makefile.core.mk
 	sed -i -e 's/x86_64/aarch64/g' pilot/docker/Dockerfile.proxyv2
 fi
-make docker.push
-
+make docker
+export DOCKER_CLI_EXPERIMENTAL=enabled
+docker images | grep $TAG | awk '{print $1" "$2;}' | \
+while read I T; do
+  docker push $IMG
+  docker manifest create --amend $I:$ISTIO_VERSION $I:$T
+	docker manifest push $I:$ISTIO_VERSION
+done
 git checkout .

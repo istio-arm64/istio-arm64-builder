@@ -3,11 +3,20 @@ export HUB ?= istioarm64
 export TAG ?= $(ISTIO_VERSION)
 export BUILDER_HUB ?= $(HUB)
 export BAZEL_BUILD_ARGS ?= ""
+export DOCKER_CLI_EXPERIMENTAL := enabled
+ifeq ($(shell uname -m),aarch64)
+  export ARCH ?= arm64
+else ifeq ($(shell uname -m),x86_64)
+  export ARCH ?= amd64
+endif
 
 .PHONY: build-tools proxy-builder istio-builder push-builder build-istio cleanup
 
 build-tools: 
-	docker buildx build --push --platform linux/arm64 -t $(BUILDER_HUB)/build-tools build-tools
+	docker build -t $(BUILDER_HUB)/build-tools-$(ARCH) build-tools
+	docker push $(BUILDER_HUB)/build-tools-$(ARCH)
+	docker manifest create --amend $(BUILDER_HUB)/build-tools $(BUILDER_HUB)/build-tools-$(ARCH)
+	docker manifest push $(BUILDER_HUB)/build-tools
 
 push-tools:
 	docker push $(BUILDER_HUB)/build-tools
