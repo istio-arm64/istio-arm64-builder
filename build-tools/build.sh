@@ -22,9 +22,7 @@ export ISTIO_ENVOY_LOCAL=/work/proxy/bazel-bin/src/envoy/envoy
 export ISTIO_ENVOY_LOCAL_PATH=$ISTIO_ENVOY_LOCAL
 export TARGET_OUT_LINUX="$(pwd)/out/${TARGET_OS}_${TARGET_ARCH}"
 export CONTAINER_TARGET_OUT_LINUX=$TARGET_OUT_LINUX
-if [ "x$TAG" = "x" ]; then
-	export TAG=${ISTIO_VERSION}-${TARGET_ARCH}
-fi
+export TAG=${ISTIO_VERSION}-${TARGET_ARCH}
 
 make build
 
@@ -38,8 +36,8 @@ make docker
 export DOCKER_CLI_EXPERIMENTAL=enabled
 docker images | grep $TAG | awk '{print $1" "$2;}' | \
 while read I T; do
-  docker push $IMG
-  docker manifest create --amend $I:$ISTIO_VERSION $I:$T
-	docker manifest push $I:$ISTIO_VERSION
+  docker push $I:$T
+  docker manifest create --amend $I:$ISTIO_VERSION $I:${ISTIO_VERSION}-amd64 $I:${ISTIO_VERSION}-arm64
+	docker manifest push --purge $I:$ISTIO_VERSION
 done
 git checkout .

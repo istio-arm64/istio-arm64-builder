@@ -15,8 +15,8 @@ endif
 build-tools: 
 	docker build -t $(BUILDER_HUB)/build-tools-$(ARCH) build-tools
 	docker push $(BUILDER_HUB)/build-tools-$(ARCH)
-	docker manifest create --amend $(BUILDER_HUB)/build-tools $(BUILDER_HUB)/build-tools-$(ARCH)
-	docker manifest push $(BUILDER_HUB)/build-tools
+	docker manifest create --amend $(BUILDER_HUB)/build-tools $(BUILDER_HUB)/build-tools-amd64 $(BUILDER_HUB)/build-tools-arm64
+	docker manifest push --purge $(BUILDER_HUB)/build-tools
 
 push-tools:
 	docker push $(BUILDER_HUB)/build-tools
@@ -28,7 +28,6 @@ build-istio:
 		--env BAZEL_BUILD_ARGS="$(BAZEL_BUILD_ARGS)" \
 		--env ISTIO_VERSION=$(ISTIO_VERSION) \
 		--env HUB=$(HUB) \
-		--env TAG=$(TAG) \
 		$(BUILDER_HUB)/build-tools build.sh
 
 cleanup:
