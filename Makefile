@@ -1,5 +1,5 @@
 export ISTIO_VERSION ?= 1.6.13
-export HUB ?= istioarm64
+export HUB ?= istiojfh
 export TAG ?= $(ISTIO_VERSION)
 export BUILDER_HUB ?= $(HUB)
 export BAZEL_BUILD_ARGS ?= ""
