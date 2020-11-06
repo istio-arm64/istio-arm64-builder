@@ -30,7 +30,6 @@ ENV HUB=istio
 ENV PATH="${GOROOT}/bin:${LLVM_INSTALL}/bin:${PATH}"
 
 COPY --from=gn /work/gn/out/gn /usr/local/bin/
-COPY build.sh /usr/local/bin/
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
      autoconf \
@@ -78,3 +77,5 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
      chmod +x /usr/local/bin/* && \
      \
      rm -rf * /var/lib/apt/lists/* /usr/share/doc /usr/share/man usr/share/locale
+
+COPY build.sh /usr/local/bin/

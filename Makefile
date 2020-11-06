@@ -28,7 +28,7 @@ build-istio:
 		--env BAZEL_BUILD_ARGS="$(BAZEL_BUILD_ARGS)" \
 		--env ISTIO_VERSION=$(ISTIO_VERSION) \
 		--env HUB=$(HUB) \
-		$(BUILDER_HUB)/build-tools build.sh
+		$(BUILDER_HUB)/build-tools bash /usr/local/bin/build.sh
 
 cleanup:
 	bash -c "docker container prune <<< y"
