@@ -70,7 +70,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         *) echo "cpu NOT in support list"; exit 1 ;; \
      esac && \
      gem install fpm && \
-     curl -L https://golang.org/dl/go1.15.2.linux-${TARGET_ARCH}.tar.gz | tar -xzf - && \
+     curl -L https://golang.org/dl/go1.14.9.linux-${TARGET_ARCH}.tar.gz | tar -xzf - && \
      mv go /usr/ && \
      \
      curl -L -o /usr/local/bin/bazel ${BAZEL_DOWNLOAD_URL} && \
