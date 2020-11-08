@@ -67,7 +67,7 @@ COPY build.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/*
 
 FROM builder
-ENV ISTIO_VERSION=1.6.13
+ARG  ISTIO_VERSION=1.6.13
 WORKDIR /work
 
-RUN bazel version && build.sh
+RUN build.sh
