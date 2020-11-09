@@ -65,9 +65,3 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
 COPY build.sh /usr/local/bin/
 
 RUN chmod +x /usr/local/bin/*
-
-FROM builder
-ARG  ISTIO_VERSION=1.6.13
-WORKDIR /work
-
-RUN build.sh

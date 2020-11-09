@@ -14,7 +14,7 @@ cd istio
 
 export BUILD_WITH_CONTAINER=0
 export USE_LOCAL_PROXY=1
-export ISTIO_ENVOY_LOCAL=/work/proxy/bazel-bin/src/envoy/envoy
+export ISTIO_ENVOY_LOCAL=/build/envoy
 export ISTIO_ENVOY_LOCAL_PATH=$ISTIO_ENVOY_LOCAL
 export TARGET_OUT_LINUX="$(pwd)/out/${TARGET_OS}_${TARGET_ARCH}"
 export CONTAINER_TARGET_OUT_LINUX=$TARGET_OUT_LINUX

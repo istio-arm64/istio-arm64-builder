@@ -12,23 +12,40 @@ endif
 
 .PHONY: build-tools proxy-builder istio-builder push-builder build-istio cleanup
 
-build-tools: 
-	docker build -t $(BUILDER_HUB)/build-tools-$(ARCH) build-tools
-	docker push $(BUILDER_HUB)/build-tools-$(ARCH)
-	docker manifest create --amend $(BUILDER_HUB)/build-tools $(BUILDER_HUB)/build-tools-amd64 $(BUILDER_HUB)/build-tools-arm64
-	docker manifest push --purge $(BUILDER_HUB)/build-tools
+build-tools: istio-builder proxy-builder
+
+istio-builder:
+	docker build -t $(BUILDER_HUB)/istio-builder istio-builder
+
+proxy-builder:
+	docker build -t $(BUILDER_HUB)/proxy-builder proxy-builder
 
 push-tools:
-	docker push $(BUILDER_HUB)/build-tools
+	docker buildx build --push --platform linux/amd64,linxu/arm64 -t $(BUILDER_HUB)/istio-builder istio-builder
+	docker buildx build --push --platform linux/amd64,linxu/arm64 -t $(BUILDER_HUB)/proxy-builder proxy-builder
 
-build-istio:
+build-istio: /build/envoy
 	docker run --rm \
 		-v /var/run/docker.sock:/var/run/docker.sock \
 		-v ${HOME}/.docker:/root/.docker \
+		-v ${PWD}/build:/build \
 		--env BAZEL_BUILD_ARGS="$(BAZEL_BUILD_ARGS)" \
 		--env ISTIO_VERSION=$(ISTIO_VERSION) \
 		--env HUB=$(HUB) \
-		$(BUILDER_HUB)/build-tools bash /usr/local/bin/build.sh
+		$(BUILDER_HUB)/istio-builder bash /usr/local/bin/build.sh
+
+build-proxy: /build/envoy
+
+/build/envoy:
+	mkdir -p build
+	docker run --rm \
+		-v /var/run/docker.sock:/var/run/docker.sock \
+		-v ${HOME}/.docker:/root/.docker \
+		-v ${PWD}/build:/build \
+		--env BAZEL_BUILD_ARGS="$(BAZEL_BUILD_ARGS)" \
+		--env ISTIO_VERSION=$(ISTIO_VERSION) \
+		--env HUB=$(HUB) \
+		$(BUILDER_HUB)/proxy-builder bash /usr/local/bin/build.sh
 
 cleanup:
 	bash -c "docker container prune <<< y"
