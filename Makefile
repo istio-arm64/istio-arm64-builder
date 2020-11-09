@@ -24,7 +24,7 @@ push-tools:
 	docker buildx build --push --platform linux/amd64,linxu/arm64 -t $(BUILDER_HUB)/istio-builder istio-builder
 	docker buildx build --push --platform linux/amd64,linxu/arm64 -t $(BUILDER_HUB)/proxy-builder proxy-builder
 
-build-istio: /build/envoy
+build-istio: build/envoy
 	docker run --rm \
 		-v /var/run/docker.sock:/var/run/docker.sock \
 		-v ${HOME}/.docker:/root/.docker \
@@ -34,9 +34,9 @@ build-istio: /build/envoy
 		--env HUB=$(HUB) \
 		$(BUILDER_HUB)/istio-builder bash /usr/local/bin/build.sh
 
-build-proxy: /build/envoy
+build-proxy: build/envoy
 
-/build/envoy:
+build/envoy:
 	mkdir -p build
 	docker run --rm \
 		-v /var/run/docker.sock:/var/run/docker.sock \
