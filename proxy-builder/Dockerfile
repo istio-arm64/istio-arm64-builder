@@ -17,7 +17,7 @@ LABEL builder="true"
 
 WORKDIR /work
 
-ENV LLVM_VERSION=9.0.1
+ENV LLVM_VERSION=9.0.0
 ENV LLVM_INSTALL=/usr/lib/llvm-9
 ENV PATH="${LLVM_INSTALL}/bin:${PATH}"
 
@@ -46,7 +46,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
          *) echo "cpu NOT in support list"; exit 1 ;; \
      esac && \
      \
-     curl -L "https://github.com/llvm/llvm-project/releases/download/llvmorg-${LLVM_VERSION}/${LLVM_PKG}.tar.xz" | tar -xJf - && \
+     curl -L "https://releases.llvm.org/${LLVM_VERSION}/${LLVM_PKG}.tar.xz" | tar -xJf - && \
      mkdir -p ${LLVM_INSTALL} && \
      mv ${LLVM_PKG}/* ${LLVM_INSTALL}/ && \
      echo "${LLVM_INSTALL}/lib" > /etc/ld.so.conf.d/llvm.conf && ldconfig && \
