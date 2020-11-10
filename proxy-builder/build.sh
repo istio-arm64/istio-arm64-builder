@@ -10,7 +10,6 @@ esac
 
 git clone --depth=1 -b $ISTIO_VERSION https://github.com/istio/proxy.git
 cd proxy
-REV_SHA1=$(git rev-parse HEAD)
 BIN_FULLNAME=istio-proxy-${ISTIO_VERSION}-${TARGET_ARCH}
 BAZEL_BUILD_ARGS="$BAZEL_BUILD_ARGS -c opt" make build_envoy
 
