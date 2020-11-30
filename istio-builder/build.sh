@@ -35,7 +35,7 @@ make docker
 export DOCKER_CLI_EXPERIMENTAL=enabled
 for I in $DOCKER_IMGS; do
 	docker push $HUB/$I:$TAG
-	if [ $TARGET_ARCH = arm64]; then
+	if [ $TARGET_ARCH = arm64 ]; then
 		docker pull istio/$I:$ISTIO_VERSION
 		docker tag istio/$I:$ISTIO_VERSION $HUB/$I:$ISTIO_VERSION-amd64
 		docker push $HUB/$I:$ISTIO_VERSION-amd64
