@@ -1,4 +1,4 @@
-export ISTIO_VERSION ?= 1.6.13
+export ISTIO_VERSION ?= 1.6.14
 export HUB ?= istiojfh
 export TAG ?= $(ISTIO_VERSION)
 export BUILDER_HUB ?= $(HUB)
