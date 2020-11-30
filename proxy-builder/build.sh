@@ -9,6 +9,8 @@ case $(uname -m) in
 esac
 
 git clone --depth=1 -b $ISTIO_VERSION https://github.com/istio/proxy.git
+export CC=clang
+export CXX=clang++
 cd proxy
 REV=$(git rev-parse $ISTIO_VERSION)
 
