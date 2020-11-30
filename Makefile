@@ -48,6 +48,6 @@ build/envoy:
 		$(BUILDER_HUB)/proxy-builder bash /usr/local/bin/build.sh
 
 cleanup:
-	bash -c "docker container prune <<< y"
-	bash -c "docker builder prune <<< y"
-	bash -c "docker image prune -a --filter 'label!=builder' <<< y"
+	docker container prune -f
+	docker builder prune -f
+	docker image prune -af --filter 'label!=builder'
