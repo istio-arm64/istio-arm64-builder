@@ -16,10 +16,12 @@ export BUILD_WITH_CONTAINER=0
 export USE_LOCAL_PROXY=1
 export ISTIO_ENVOY_LOCAL=/build/envoy
 export ISTIO_ENVOY_LOCAL_PATH=$ISTIO_ENVOY_LOCAL
+export ISTIO_ENVOY_LINUX_RELEASE_PATH=$ISTIO_ENVOY_LOCAL
+export ISTIO_ENVOY_CENTOS_LINUX_RELEASE_PATH=$ISTIO_ENVOY_LOCAL
 export TARGET_OUT_LINUX="$(pwd)/out/${TARGET_OS}_${TARGET_ARCH}"
 export CONTAINER_TARGET_OUT_LINUX=$TARGET_OUT_LINUX
 export TAG=${ISTIO_VERSION}-${TARGET_ARCH}
-
+export DOCKER_TARGETS="docker.pilot docker.proxyv2"
 make build
 
 HUB=docker.io/istio TAG=$(grep BASE_VERSION Makefile.core.mk | awk '{print $3;}') make docker.base
