@@ -12,16 +12,17 @@ git clone --depth=1 -b $ISTIO_VERSION https://github.com/istio/proxy.git
 cd proxy
 REV=$(git rev-parse $ISTIO_VERSION)
 
+BAZEL_OUT="$(bazel info $BAZEL_BUILD_ARGS -c opt output_path)/k8-opt/bin"
+BAZEL_TARGET="${BAZEL_OUT}/src/envoy/envoy_tar.tar.gz"
 BIN_FULLNAME=istio-proxy-${ISTIO_VERSION}-${TARGET_ARCH}
-BAZEL_BUILD_ARGS="$BAZEL_BUILD_ARGS -c opt" make build_envoy
-cp /work/proxy/bazel-bin/src/envoy/envoy /build/envoy
-cp /build/envoy /build/envoy-$REV
-tar -C /build -czf /build/${BIN_FULLNAME}.tar.gz envoy
+bazel build ${BAZEL_BUILD_ARGS} --config=release -c opt //src/envoy:envoy_tar
+cp -f "${BAZEL_TARGET}" /build/envoy-${REV}.tar.gz
 
 if [[ $ISTIO_VERSION =~ ^1\.8 ]]; then
+	rm -rf ~/.cache
+  BAZEL_OUT="$(bazel info $BAZEL_BUILD_ARGS -c opt --cxxopt -D_GLIBCXX_USE_CXX11_ABI=1 --cxxopt -DENVOY_IGNORE_GLIBCXX_USE_CXX11_ABI_ERROR=1 output_path)/k8-opt/bin"
+	BAZEL_TARGET="${BAZEL_OUT}/src/envoy/envoy_tar.tar.gz"
 	CENTOS_BIN_FULLNAME=istio-proxy-centos-${ISTIO_VERSION}-${TARGET_ARCH}
-	BAZEL_BUILD_ARGS="$BAZEL_BUILD_ARGS -c opt --cxxopt -D_GLIBCXX_USE_CXX11_ABI=1 --cxxopt -DENVOY_IGNORE_GLIBCXX_USE_CXX11_ABI_ERROR=1" BUILD_ENVOY_BINARY_ONLY=1 BASE_BINARY_NAME=envoy-centos make build_envoy
-	cp /work/proxy/bazel-bin/src/envoy/envoy-centos /build/envoy-centos
-	cp /build/envoy-centos /build/envoy-centos-$REV
-	tar -C /build -czf /build/${CENTOS_BIN_FULLNAME}.tar.gz envoy-centos
+	bazel build ${BAZEL_BUILD_ARGS} --config=release -c opt --cxxopt -D_GLIBCXX_USE_CXX11_ABI=1 --cxxopt -DENVOY_IGNORE_GLIBCXX_USE_CXX11_ABI_ERROR=1 //src/envoy:envoy_tar
+	cp -f "${BAZEL_TARGET}" /build/envoy-centos-${REV}.tar.gz
 fi
