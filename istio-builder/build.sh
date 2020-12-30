@@ -21,7 +21,7 @@ export ISTIO_ENVOY_CENTOS_LINUX_RELEASE_PATH=$ISTIO_ENVOY_LOCAL
 export TARGET_OUT_LINUX="$(pwd)/out/${TARGET_OS}_${TARGET_ARCH}"
 export CONTAINER_TARGET_OUT_LINUX=$TARGET_OUT_LINUX
 export TAG=${ISTIO_VERSION}-${TARGET_ARCH}
-export DOCKER_TARGETS="docker.pilot docker.proxyv2"
+export DOCKER_TARGETS="docker.pilot docker.proxyv2 docker.install-cni"
 export DOCKER_IMGS="pilot proxyv2"
 make build
 
